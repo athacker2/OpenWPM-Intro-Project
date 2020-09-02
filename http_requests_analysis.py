@@ -50,6 +50,12 @@ conn.close()
 
 print_top_domains(SORTED_THIRD_PARTY_DOMAINS_NO_BLOCK, SORTED_THIRD_PARTY_DOMAINS_BLOCK)
 
+no_block_mean = sum([x[1] for x in NO_BLOCK_HTTP_REQUESTS])/len([x[1] for x in NO_BLOCK_HTTP_REQUESTS])
+block_mean = sum([x[1] for x in BLOCK_HTTP_REQUESTS])/len([x[1] for x in BLOCK_HTTP_REQUESTS])
+
+print(f"Mean NoBlock - {no_block_mean}")
+print(f"Mean Block - {block_mean}")
+
 plt.figure(figsize=(12,7))
 
 #Plot for HTML REQUESTS in vanilla vs ad block browsing
@@ -58,6 +64,7 @@ no_block.set_title('Ad-Block Disabled')
 no_block.set(xlabel = 'Top 100 Websites', ylabel = "Number of Third-Party HTTP Requests")
 plt.ylim(0,500)
 no_block.bar([x[0] for x in NO_BLOCK_HTTP_REQUESTS], [x[1] for x in NO_BLOCK_HTTP_REQUESTS])
+no_block.axhline(no_block_mean, color='red')
 no_block.tick_params(axis=u'both', which=u'both',length=0)
 
 with_block = plt.subplot(122)
@@ -65,7 +72,7 @@ with_block.set_title('Ad-Block Enabled')
 with_block.set(xlabel = 'Top 100 Websites', ylabel = "")
 plt.ylim(0,500)
 with_block.bar([x[0] for x in BLOCK_HTTP_REQUESTS], [x[1] for x in BLOCK_HTTP_REQUESTS])
+with_block.axhline(block_mean, color='red')
 with_block.tick_params(axis=u'both', which=u'both',length=0)
-plt.suptitle('HTTP Requests')
 
 plt.show()
